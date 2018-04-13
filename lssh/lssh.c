@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
+#include <sys/wait.h>
 
 #define PROMPT "lambda-shell$ "
 
 #define MAX_TOKENS 100
 #define COMMANDLINE_BUFSIZE 1024
-#define DEBUG 1  // Set to 1 to turn on some debugging output, or 0 to turn off
+#define DEBUG 0  // Set to 1 to turn on some debugging output, or 0 to turn off
 
 /**
  * Parse the command line.
@@ -87,6 +89,13 @@ int main(void)
         // Exit the shell if args[0] is the built-in "exit" command
         if (strcmp(args[0], "exit") == 0) {
             break;
+        }
+
+        if (strcmp(args[0], "cd\n") == 0) {
+            if (chdir(args[1]) == -1 {
+                perror("chdir");
+            }
+            continue;
         }
 
         #if DEBUG
